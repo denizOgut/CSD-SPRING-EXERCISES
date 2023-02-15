@@ -21,19 +21,22 @@ public class FreeGamesSearchService {
     private String GAMES_CATEGORY_URL;
     @Value("${app.freegamesapi.games.platform.url}")
     private String GAMES_PLATFORM_URL;
+    @Value("${app.freegamesapi.games.by.id.url}")
+    private String GAME_BY_ID_URL;
+
 
     public FreeGamesSearchService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-    public Games getAllGames() {
+    public Games findAllGames() {
         var response = restTemplate.getForEntity(GAMES_URL, Game[].class);
         var games = new Games();
         games.gameList = Arrays.asList(Objects.requireNonNull(response.getBody()));
         return games;
     }
 
-    public Games getAllGamesByCategory(String category)
+    public Games findAllGamesByCategory(String category)
     {
         var response = restTemplate.getForEntity(String.format(GAMES_CATEGORY_URL,category), Game[].class);
         var games = new Games();
@@ -41,11 +44,16 @@ public class FreeGamesSearchService {
         return games;
     }
 
-    public Games getAllGamesByPlatform(String category)
+    public Games findAllGamesByPlatform(String platform)
     {
-        var response = restTemplate.getForEntity(String.format(GAMES_PLATFORM_URL,category), Game[].class);
+        var response = restTemplate.getForEntity(String.format(GAMES_PLATFORM_URL,platform), Game[].class);
         var games = new Games();
         games.gameList = Arrays.asList(Objects.requireNonNull(response.getBody()));
         return games;
+    }
+
+    public Game findGameById(int id)
+    {
+        return restTemplate.getForObject(String.format(GAME_BY_ID_URL,id),Game.class);
     }
 }
