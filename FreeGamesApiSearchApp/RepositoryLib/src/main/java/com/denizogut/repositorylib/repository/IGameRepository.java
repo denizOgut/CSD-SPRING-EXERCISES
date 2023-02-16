@@ -9,8 +9,8 @@ import java.util.Optional;
 public interface IGameRepository extends JpaRepository <Game,Integer> {
      Optional<Game> findById(int id);
 
-     List<Game> finAllByPlatform(String platform);
+     List<Game> findAllByPlatform(String platform);
 
-    List<Game> finAllByGenre(String platform);
+    List<Game> findAllByGenre(String platform);
 
 }

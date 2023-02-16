@@ -1,8 +1,8 @@
 package com.example.freegamessearch.controller;
 
-import com.example.freegamessearch.api.freegames.entity.Game;
+import com.denizogut.repositorylib.entity.Game;
 import com.example.freegamessearch.api.freegames.entity.Games;
-import com.example.freegamessearch.api.freegames.service.FreeGamesSearchService;
+import com.example.freegamessearch.service.FreeGamesSearchService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,9 +38,12 @@ public class FreeGamesSearchController {
     }
 
     @GetMapping("/game/id/{id}")
-    public ResponseEntity<Game> findGameById(@PathVariable int id)
-    {
-        var game = freeGamesSearchService.findGameById(id);
-        return  new ResponseEntity<>(game,HttpStatus.OK);
+    public ResponseEntity<Game> findGameById(@PathVariable int id) {
+        var gameOptional = freeGamesSearchService.findGameById(id);
+        if (gameOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        var game = gameOptional.get();
+        return ResponseEntity.ok(game);
     }
 }
